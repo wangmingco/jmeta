@@ -3,12 +3,6 @@ package co.wangming.jmeta.core.processor;
 import co.wangming.jmeta.core.annotation.Metadata;
 import co.wangming.jmeta.core.classmakers.FieldClassMaker;
 import co.wangming.jmeta.core.classmakers.MethodClassMaker;
-import com.sun.tools.javac.api.JavacTrees;
-import com.sun.tools.javac.processing.JavacProcessingEnvironment;
-import com.sun.tools.javac.tree.JCTree;
-import com.sun.tools.javac.tree.TreeMaker;
-import com.sun.tools.javac.util.Context;
-import com.sun.tools.javac.util.Names;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +12,6 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
-import javax.lang.model.util.Types;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -26,37 +19,25 @@ import java.util.Set;
 
 
 /**
+ * 该处理器已经被放弃, 使用 #{@link InnerClassProcessor} 作为代替品
+ *
  * Created By WangMing On 2019/1/25
  **/
+@Deprecated
 @SupportedAnnotationTypes("Metadata")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class MetadataProcessor extends AbstractProcessor {
 
     private static final Logger LOGGER = LogManager.getLogger(MetadataProcessor.class);
 
-    private Types typeUtils;
     private Elements elementUtils;
     private Filer filer;
-
-    // JavacTrees提供了待处理的抽象语法树
-    private JavacTrees trees;
-    // TreeMaker封装了创建AST节点的一些方法
-    private TreeMaker treeMaker;
-    // Names提供了创建标识符的方法
-    private Names names;
-
 
     @Override
     public synchronized void init(ProcessingEnvironment env) {
         super.init(env);
-        typeUtils = processingEnv.getTypeUtils();
         elementUtils = processingEnv.getElementUtils();
         filer = processingEnv.getFiler();
-
-        this.trees = JavacTrees.instance(processingEnv);
-        Context context = ((JavacProcessingEnvironment) processingEnv).getContext();
-        this.treeMaker = TreeMaker.instance(context);
-        this.names = Names.instance(context);
     }
 
     @Override
@@ -76,11 +57,11 @@ public class MetadataProcessor extends AbstractProcessor {
 
         try {
             for (Element annotatedElement : roundEnv.getElementsAnnotatedWith(Metadata.class)) {
-
                 makeReflectInnerClass(annotatedElement);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("生成类失败", e);
+            return false;
         }
         return true;
     }
@@ -89,8 +70,6 @@ public class MetadataProcessor extends AbstractProcessor {
 
         PackageElement pkg = elementUtils.getPackageOf(annotatedElement);
         String packageName = pkg.isUnnamed() ? null : pkg.getQualifiedName().toString();
-
-        JCTree jcTree = trees.getTree(annotatedElement);
 
         FieldClassMaker fieldClassMaker = new FieldClassMaker(packageName, annotatedElement, filer);
         MethodClassMaker methodClassMaker = new MethodClassMaker(packageName, annotatedElement, filer);

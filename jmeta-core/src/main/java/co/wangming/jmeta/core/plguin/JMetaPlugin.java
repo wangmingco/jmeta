@@ -19,6 +19,6 @@ public class JMetaPlugin implements Plugin {
 
     @Override
     public void init(JavacTask task, String... args) {
-        LOGGER.info("JMetaPlugin---->  init over, {}, {}", task, args);
+        LOGGER.debug("init nothing {}, {}", task, args);
     }
 }

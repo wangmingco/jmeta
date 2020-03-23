@@ -1,9 +1,8 @@
 package co.wangming.jmeta.core.processor;
 
-import co.wangming.jmeta.core.ElementWrapper;
 import co.wangming.jmeta.core.annotation.Metadata;
-import co.wangming.jmeta.core.handlers.FieldClassMaker;
-import co.wangming.jmeta.core.handlers.MethodClassMaker;
+import co.wangming.jmeta.core.classmakers.FieldClassMaker;
+import co.wangming.jmeta.core.classmakers.MethodClassMaker;
 import com.sun.tools.javac.api.JavacTrees;
 import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.tree.JCTree;
@@ -93,16 +92,8 @@ public class MetadataProcessor extends AbstractProcessor {
 
         JCTree jcTree = trees.getTree(annotatedElement);
 
-        ElementWrapper elementWrapper = ElementWrapper.build();
-        elementWrapper.setAnnotatedElement(annotatedElement);
-        elementWrapper.setPackageName(packageName);
-        elementWrapper.setFiler(filer);
-        elementWrapper.setJcTree(jcTree);
-
-        ProcessorUtil.addElement(elementWrapper);
-
-        FieldClassMaker fieldClassMaker = new FieldClassMaker(elementWrapper);
-        MethodClassMaker methodClassMaker = new MethodClassMaker(elementWrapper);
+        FieldClassMaker fieldClassMaker = new FieldClassMaker(packageName, annotatedElement, filer);
+        MethodClassMaker methodClassMaker = new MethodClassMaker(packageName, annotatedElement, filer);
 
         ArrayList<String> classNames = new ArrayList<>();
 

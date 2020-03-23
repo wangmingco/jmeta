@@ -1,6 +1,5 @@
-package co.wangming.jmeta.core.handlers;
+package co.wangming.jmeta.core.classmakers;
 
-import co.wangming.jmeta.core.ElementWrapper;
 import co.wangming.jmeta.core.proxy.Method;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
@@ -8,6 +7,7 @@ import com.squareup.javapoet.TypeSpec;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.processing.Filer;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import java.util.HashMap;
@@ -22,8 +22,8 @@ public class MethodClassMaker extends AbstractClassMaker {
 
     private Map<String, Element> methods = new HashMap<>();
 
-    public MethodClassMaker(ElementWrapper elementWrapper) {
-        super(elementWrapper);
+    public MethodClassMaker(String packageName, Element annotatedElement, Filer filer) {
+        super(packageName, annotatedElement, filer);
     }
 
     public int addMethod(Element element) {
@@ -37,7 +37,7 @@ public class MethodClassMaker extends AbstractClassMaker {
     }
 
     @Override
-    protected void impl(ElementWrapper elementWrapper, TypeSpec.Builder typeSpec, String targetClassName) {
+    protected void impl(TypeSpec.Builder typeSpec, String targetClassName) {
 // 遍历所有的字段遍历
         for (Element element : methods.values()) {
 

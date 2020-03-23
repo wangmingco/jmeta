@@ -1,11 +1,11 @@
-package co.wangming.jmeta.core.handlers;
+package co.wangming.jmeta.core.classmakers;
 
-import co.wangming.jmeta.core.ElementWrapper;
 import co.wangming.jmeta.core.proxy.Field;
 import com.squareup.javapoet.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.processing.Filer;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import java.util.HashMap;
@@ -20,8 +20,8 @@ public class FieldClassMaker extends AbstractClassMaker {
 
     private Map<String, Element> fileds = new HashMap<>();
 
-    public FieldClassMaker(ElementWrapper elementWrapper) {
-        super(elementWrapper);
+    public FieldClassMaker(String packageName, Element annotatedElement, Filer filer) {
+        super(packageName, annotatedElement, filer);
     }
 
     public int addField(Element element) {
@@ -35,7 +35,8 @@ public class FieldClassMaker extends AbstractClassMaker {
     }
 
     @Override
-    protected void impl(ElementWrapper elementWrapper, TypeSpec.Builder typeSpec, String targetClassName) {
+    protected void impl(TypeSpec.Builder typeSpec, String targetClassName) {
+
         // 遍历所有的字段遍历
         for (Element element : fileds.values()) {
 

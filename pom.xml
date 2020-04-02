@@ -14,6 +14,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven-compiler-plugin-version>3.8.1</maven-compiler-plugin-version>
+		<junit-version>4.13</junit-version>
 	</properties>
 
 	<modules>
@@ -21,6 +22,15 @@
 		<module>jmeta-sample</module>
 	</modules>
 
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit-version}</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
 	<build>
 		<plugins>
 			<plugin>

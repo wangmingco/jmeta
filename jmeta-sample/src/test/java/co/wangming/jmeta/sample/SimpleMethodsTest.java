@@ -3,7 +3,7 @@ package co.wangming.jmeta.sample;
 /**
  * Created By WangMing On 2019/1/30
  **/
-public class MethodTest {
+public class SimpleMethodsTest {
 
 //    @Test
 //    public void testPublic() {

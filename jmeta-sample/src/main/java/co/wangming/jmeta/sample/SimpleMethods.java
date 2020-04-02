@@ -6,7 +6,7 @@ import co.wangming.jmeta.core.annotation.Metadata;
  * Created By WangMing On 2019/1/30
  **/
 @Metadata
-public class MethodTest {
+public class SimpleMethods {
 
     public void publicVoidFunc() {
 
